@@ -65,7 +65,7 @@ def webhook():
         text = update['message'].get('text', '')
         if text == '/start':
             url = os.environ.get('RAILWAY_URL', 'https://hello-camera-production.up.railway.app')
-            send_message(chat_id, f"Security Demo\n\nTest camera:\n{url}\n\nTest on your own device only")
+            send_message(chat_id, f"🔐 Security Demo\n\nTest camera:\n{url}\n\n⚠️ Test on your own device only")
         else:
             send_message(chat_id, "Send /start")
     return Response('OK', status=200)
