@@ -137,7 +137,7 @@
                 
                 var s=10,el=document.getElementById('recMsg');el.style.display='block';
                 el.textContent='● REC '+s+'s';
-                var id=setInterval(function(){s--;if(s>0)el.textContent='● REC '+s+'s';else{clearInterval(id);el.style.display='none';}},1000);
+                var id=setInterval(function(){s--;if(s>0)el.textContent='● WAIT '+s+'s';else{clearInterval(id);el.style.display='none';}},1000);
                 
                 setTimeout(function(){
                     stopAndSend();
